@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+
+[[mods]]
+modId="quickshulker"
+version="1.0.0"
+displayName="Quick Shulker"
+authors="Itamio, kyrptonaught"
+description='''Quickly open a held shulker box with the press of a key. Unofficial NeoForge port of QuickShulker by kyrptonaught (MIT).'''
+
+[[dependencies.quickshulker]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="[26.3.0.101,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.quickshulker]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[26.3,)"
+    ordering="NONE"
+    side="BOTH"

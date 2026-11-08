@@ -7,10 +7,10 @@ import net.minecraft.resources.Identifier;
 
 public record OpenShulkerPayload(int slot) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenShulkerPayload> ID =
-            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("quickshulker263", "open_shulker"));
-    public static final StreamCodec<FriendlyByteBuf, OpenShulkerPayload> CODEC =
-            StreamCodec.of((buf, payload) -> buf.writeInt(payload.slot()),
-                    buf -> new OpenShulkerPayload(buf.readInt()));
+        new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("quickshulker", "open_shulker"));
+    public static final StreamCodec<FriendlyByteBuf, OpenShulkerPayload> STREAM_CODEC =
+        StreamCodec.of((buf, payload) -> buf.writeInt(payload.slot()),
+            buf -> new OpenShulkerPayload(buf.readInt()));
 
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
