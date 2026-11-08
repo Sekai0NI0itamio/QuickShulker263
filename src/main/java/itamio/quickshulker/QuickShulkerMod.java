@@ -23,7 +23,7 @@ public class QuickShulkerMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.serverboundPlay().register(OpenShulkerPayload.ID, OpenShulkerPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(OpenShulkerPayload.ID, OpenShulkerPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(OpenShulkerPayload.ID, (payload, context) -> {
             context.server().execute(() -> openItem(context.player(), payload.slot()));
         });
