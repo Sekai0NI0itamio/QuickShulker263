@@ -3,7 +3,7 @@ package itamio.quickshulker;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
+import net.minecraft.util.Identifier;
 
 public record OpenShulkerPayload(int slot) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenShulkerPayload> ID =
