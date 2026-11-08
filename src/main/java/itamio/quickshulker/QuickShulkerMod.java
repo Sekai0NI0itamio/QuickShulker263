@@ -55,7 +55,7 @@ public class QuickShulkerMod implements ModInitializer {
         if (!(stack.getItem() instanceof BlockItem blockItem)) return;
 
         if (blockItem.getBlock() instanceof ShulkerBoxBlock) {
-            Component title = stack.hasCustomName() ? stack.getHoverName() : Component.translatable("container.shulkerBox");
+            Component title = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME) != null ? stack.getHoverName() : Component.translatable("container.shulkerBox");
             player.openMenu(new SimpleMenuProvider(
                     (id, inv, p) -> new ShulkerBoxMenu(id, inv, new ItemStackContainer(stack, 27)), title));
         } else if (blockItem.getBlock() instanceof EnderChestBlock) {
