@@ -1,0 +1,22 @@
+NOTICE
+
+QuickShulker263 (Itamio port for Minecraft 26.3)
+
+This mod is an unofficial port of "QuickShulker" by kyrptonaught
+(https://github.com/kyrptonaught/quickshulker, MIT License, Modrinth:
+https://modrinth.com/mod/quickshulker), which quickly opens shulker
+boxes without placing them down.
+
+All credit for the original concept, design, and logic goes to
+kyrptonaught. This port was created by Itamio to bring the
+functionality to Minecraft 26.3 because the original mod has not
+been updated to this version. The original source repository was
+located and studied at https://github.com/kyrptonaught/quickshulker;
+this port is a clean reimplementation against current Minecraft
+26.3 / Fabric APIs (data components for shulker contents, custom
+packet payloads, vanilla menu types) and does not depend on the
+original's kyrptconfig or shulkerutils libraries. Creative-mode
+bundling helpers from the original are not included.
+
+Itamio does not take credit for any of the original assets or logic.
+The code was updated to be compatible with Minecraft 26.3 (Fabric).
