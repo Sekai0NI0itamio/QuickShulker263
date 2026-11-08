@@ -14,24 +14,10 @@ jobs:
         run: |
           JAR=$(find ~/.gradle /home/runner -name "minecraft-merged*.jar" 2>/dev/null | head -1)
           echo "JAR=$JAR"
-          if [ -n "$JAR" ]; then
-            echo "=== Minecraft screen/fields ==="
-            javap -classpath "$JAR" net.minecraft.client.Minecraft | grep -i "screen\|Screen" | head -30
-            echo "=== Inventory ==="
-            javap -classpath "$JAR" net.minecraft.world.entity.player.Inventory | grep -i "selected\|Selected" | head -10
-            echo "=== InputConstants Type ==="
-            javap -classpath "$JAR" 'com.mojang.blaze3d.platform.InputConstants$Type' | head -20
-            echo "=== KeyMapping ctors ==="
-            javap -classpath "$JAR" net.minecraft.client.KeyMapping | head -20
-            echo "=== InteractionResult ==="
-            unzip -l "$JAR" | grep -i InteractionResult | head -10
-            javap -classpath "$JAR" net.minecraft.world.InteractionResult | head -30
-            echo "=== ItemStack custom ==="
-            javap -classpath "$JAR" net.minecraft.world.item.ItemStack | grep -i "custom\|Custom" | head
-            echo "=== DataComponents ==="
-            javap -classpath "$JAR" net.minecraft.core.component.DataComponents | grep -i "CONTAINER\|CUSTOM_NAME" | head
-            echo "=== UseItemCallback ==="
-            find ~/.gradle -name "fabric-use-item*.jar" 2>/dev/null | head -3
-            FJAR=$(find ~/.gradle /home/runner -name "fabric-*.jar" 2>/dev/null | head -20)
-            echo "$FJAR"
-          fi
+          javap -p -classpath "$JAR" net.minecraft.client.Minecraft | head -80
+          echo "=== UseItemCallback ==="
+          FJ=$(find ~/.gradle -path "*fabric-use-item*" -name "*.jar" 2>/dev/null | head -1)
+          echo "FJ=$FJ"
+          if [ -n "$FJ" ]; then unzip -l "$FJ" | head -20; fi
+          FJ2=$(find ~/.gradle -name "fabric-api-*.jar" 2>/dev/null | head -1)
+          echo "FJ2=$FJ2"
