@@ -7,13 +7,14 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
 
 public class QuickShulkerClient implements ClientModInitializer {
     public static final KeyMapping OPEN_KEY = new KeyMapping(
             "key.quickshulker263.open",
             InputConstants.Type.KEYSYM,
             75,
-            "QuickShulker");
+            KeyMapping.Category.register(Identifier.fromNamespaceAndPath("quickshulker263", "general")));
 
     @Override
     public void onInitializeClient() {
