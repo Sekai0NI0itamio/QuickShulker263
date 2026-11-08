@@ -3,7 +3,7 @@
 	"id": "quickshulker263",
 	"version": "${version}",
 	"name": "QuickShulker263",
-	"description": "Quickly open shulker boxes (and ender chests, crafting tables, stonecutters) without placing them down, for Minecraft 1.21.1. Unofficial port of QuickShulker by kyrptonaught (MIT, https://github.com/kyrptonaught/quickshulker). Press K or right-click a held item to open it. All credit for the original concept and logic goes to kyrptonaught. See NOTICE.",
+	"description": "Quickly open shulker boxes (and ender chests, crafting tables, stonecutters) without placing them down, for Minecraft 1.20.1 (Fabric). Unofficial port of QuickShulker by kyrptonaught (MIT). Press K or right-click a held item to open it. All credit for the original concept and logic goes to kyrptonaught. See NOTICE.",
 	"authors": ["Itamio", "kyrptonaught (original)"],
 	"contact": {
 		"homepage": "https://github.com/Sekai0NI0itamio/QuickShulker263",
@@ -18,8 +18,8 @@
 	},
 	"depends": {
 		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
+		"minecraft": ">=1.20.1 <1.21",
+		"java": ">=17",
 		"fabric-api": "*"
 	}
 }

@@ -1,7 +1,6 @@
 package itamio.quickshulker;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleMenuProvider;
@@ -23,11 +22,10 @@ public class QuickShulkerMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playC2S().register(OpenShulkerPayload.ID, OpenShulkerPayload.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(OpenShulkerPayload.ID, (payload, context) -> {
-            context.server().execute(() -> openItem(context.player(), payload.slot()));
+        ServerPlayNetworking.registerGlobalReceiver(OpenShulkerPayload.ID, (server, player, handler, buf, sender) -> {
+            int slot = buf.readInt();
+            server.execute(() -> openItem(player, slot));
         });
-
     }
 
     public static boolean isOpenable(ItemStack stack) {
@@ -39,7 +37,6 @@ public class QuickShulkerMod implements ModInitializer {
     }
 
     public static boolean canOpenInHand(ItemStack stack) {
-        // Original allowed all registered block types to open in hand.
         return isOpenable(stack);
     }
 
@@ -55,7 +52,7 @@ public class QuickShulkerMod implements ModInitializer {
         if (!(stack.getItem() instanceof BlockItem blockItem)) return;
 
         if (blockItem.getBlock() instanceof ShulkerBoxBlock) {
-            Component title = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME) != null ? stack.getHoverName() : Component.translatable("container.shulkerBox");
+            Component title = stack.hasCustomHoverName() ? stack.getHoverName() : Component.translatable("container.shulkerBox");
             player.openMenu(new SimpleMenuProvider(
                     (id, inv, p) -> new ShulkerBoxMenu(id, inv, new ItemStackContainer(stack, 27)), title));
         } else if (blockItem.getBlock() instanceof EnderChestBlock) {

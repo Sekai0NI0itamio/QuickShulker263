@@ -1,10 +1,10 @@
 package itamio.quickshulker;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemContainerContents;
 
 public class ItemStackContainer extends SimpleContainer {
     private final ItemStack stack;
@@ -13,10 +13,17 @@ public class ItemStackContainer extends SimpleContainer {
     public ItemStackContainer(ItemStack stack, int size) {
         super(size);
         this.stack = stack;
-        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
-        if (contents != null) {
+        CompoundTag blockEntityTag = stack.getTagElement("BlockEntityTag");
+        if (blockEntityTag != null) {
             NonNullList<ItemStack> list = NonNullList.withSize(size, ItemStack.EMPTY);
-            contents.copyInto(list);
+            for (Tag element : blockEntityTag.getList("Items", 10)) {
+                if (element instanceof CompoundTag compound) {
+                    int slot = compound.getInt("Slot");
+                    if (slot >= 0 && slot < size) {
+                        list.set(slot, ItemStack.of(compound));
+                    }
+                }
+            }
             for (int i = 0; i < size; i++) {
                 super.setItem(i, list.get(i));
             }
@@ -28,7 +35,21 @@ public class ItemStackContainer extends SimpleContainer {
     public void setChanged() {
         super.setChanged();
         if (!loading) {
-            stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(getItems()));
+            CompoundTag blockEntityTag = stack.getTagElement("BlockEntityTag");
+            if (blockEntityTag == null) {
+                blockEntityTag = new CompoundTag();
+                stack.getOrCreateTag().put("BlockEntityTag", blockEntityTag);
+            }
+            net.minecraft.nbt.ListTag items = new net.minecraft.nbt.ListTag();
+            for (int i = 0; i < getContainerSize(); i++) {
+                ItemStack item = getItem(i);
+                if (!item.isEmpty()) {
+                    CompoundTag tag = item.save(new CompoundTag());
+                    tag.putByte("Slot", (byte) i);
+                    items.add(tag);
+                }
+            }
+            blockEntityTag.put("Items", items);
         }
     }
 }

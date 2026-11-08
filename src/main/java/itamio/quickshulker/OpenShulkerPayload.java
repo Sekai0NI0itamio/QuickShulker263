@@ -1,19 +1,20 @@
 package itamio.quickshulker;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-public record OpenShulkerPayload(int slot) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<OpenShulkerPayload> ID =
-            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("quickshulker263", "open_shulker"));
-    public static final StreamCodec<FriendlyByteBuf, OpenShulkerPayload> CODEC =
-            StreamCodec.of((buf, payload) -> buf.writeInt(payload.slot()),
-                    buf -> new OpenShulkerPayload(buf.readInt()));
+public class OpenShulkerPayload {
+    public static final ResourceLocation ID =
+            new ResourceLocation("quickshulker263", "open_shulker");
 
-    @Override
-    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
-        return ID;
+    @Environment(EnvType.CLIENT)
+    public static void send(int slot) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(slot);
+        ClientPlayNetworking.send(ID, buf);
     }
 }
