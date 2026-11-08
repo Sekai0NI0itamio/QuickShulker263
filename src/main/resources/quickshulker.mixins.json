@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "itamio.quickshulker.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "quickshulker.refmap.json",
+  "minVersion": "0.8"
+}

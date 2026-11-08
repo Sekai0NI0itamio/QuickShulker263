@@ -1,8 +1,7 @@
 package itamio.quickshulker;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
@@ -16,16 +15,41 @@ import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.EnderChestBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.StonecutterBlock;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
-public class QuickShulkerMod implements ModInitializer {
-    public static final String MOD_ID = "quickshulker263";
+/**
+ * Unofficial Forge port of QuickShulker by kyrptonaught (MIT).
+ * See NOTICE for credit and licensing.
+ */
+@Mod("quickshulker")
+public class QuickShulkerForgeMod {
+    public static final String MOD_ID = "quickshulker";
+    private static final String PROTOCOL_VERSION = "1";
 
-    @Override
-    public void onInitialize() {
-        ServerPlayNetworking.registerGlobalReceiver(OpenShulkerPayload.ID, (server, player, handler, buf, sender) -> {
-            int slot = buf.readInt();
-            server.execute(() -> openItem(player, slot));
-        });
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation("quickshulker", "open"),
+            () -> PROTOCOL_VERSION,
+            version -> version.equals(PROTOCOL_VERSION),
+            version -> version.equals(PROTOCOL_VERSION));
+
+    private static int packetId = 0;
+
+    private static int nextPacketId() {
+        return packetId++;
+    }
+
+    public QuickShulkerForgeMod() {
+        INSTANCE.registerMessage(nextPacketId(), OpenShulkerPacket.class,
+                OpenShulkerPacket::encode,
+                OpenShulkerPacket::decode,
+                OpenShulkerPacket::handle);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            QuickShulkerClient.init();
+        }
     }
 
     public static boolean isOpenable(ItemStack stack) {

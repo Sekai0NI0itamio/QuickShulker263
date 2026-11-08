@@ -1,23 +1,26 @@
 package itamio.quickshulker;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class QuickShulkerClient implements ClientModInitializer {
+public class QuickShulkerClient {
     public static final KeyMapping OPEN_KEY = new KeyMapping(
-            "key.quickshulker263.open",
-            InputConstants.Type.KEYSYM,
+            "key.quickshulker.open",
+            net.minecraftforge.client.settings.KeyConflictContext.IN_GAME,
+            com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM,
             75,
-            "QuickShulker");
+            "key.categories.quickshulker");
 
-    @Override
-    public void onInitializeClient() {
-        KeyBindingHelper.registerKeyBinding(OPEN_KEY);
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+    public static void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((RegisterKeyMappingsEvent event) -> {
+            event.register(OPEN_KEY);
+        });
+        MinecraftForge.EVENT_BUS.addListener((TickEvent.ClientTickEvent event) -> {
+            if (event.phase != TickEvent.Phase.END) return;
             Minecraft mc = Minecraft.getInstance();
             if (mc.player == null) return;
             while (OPEN_KEY.consumeClick()) {
@@ -27,8 +30,8 @@ public class QuickShulkerClient implements ClientModInitializer {
                 } else {
                     slot = mc.player.getInventory().selected;
                 }
-                if (QuickShulkerMod.isOpenable(mc.player.getInventory().getItem(slot))) {
-                    OpenShulkerPayload.send(slot);
+                if (QuickShulkerForgeMod.isOpenable(mc.player.getInventory().getItem(slot))) {
+                    QuickShulkerForgeMod.INSTANCE.sendToServer(new OpenShulkerPacket(slot));
                 }
             }
         });
