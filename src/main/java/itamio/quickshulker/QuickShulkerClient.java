@@ -26,7 +26,7 @@ public class QuickShulkerClient implements ClientModInitializer {
                 if (mc.player.getMainHandItem().isEmpty() && !mc.player.getOffhandItem().isEmpty()) {
                     slot = 40;
                 } else {
-                    slot = mc.player.getInventory().getSelectedSlot();
+                    slot = mc.player.getInventory().selected;
                 }
                 if (QuickShulkerMod.isOpenable(mc.player.getInventory().getItem(slot))) {
                     ClientPlayNetworking.send(new OpenShulkerPayload(slot));
